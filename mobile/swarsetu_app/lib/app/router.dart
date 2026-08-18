@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/home/home_screen.dart';
+import '../features/translation/presentation/screens/translation_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -10,9 +11,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     GoRoute(
       path: '/translate',
-      builder: (context, state) => const Scaffold(
-        body: Center(child: Text('Translate Screen Placeholder')),
-      ),
+      builder: (context, state) => const TranslationScreen(),
     ),
     GoRoute(
       path: '/phrasebook',
