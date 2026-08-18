@@ -1,90 +1,81 @@
 import 'package:flutter/material.dart';
-
-import '../constants/app_colors.dart';
-import '../constants/app_dimensions.dart';
-import 'app_text_styles.dart';
+import 'package:flutter/services.dart';
+import 'app_colors.dart';
+import 'app_dimensions.dart';
+import '../theme/app_text_styles.dart';
 
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get light {
+  static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
-
-      brightness: Brightness.light,
-
-      scaffoldBackgroundColor: AppColors.background,
-
-      colorScheme: const ColorScheme.light(
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppColors.deepNavy,
+      primaryColor: AppColors.royalBlue,
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.royalBlue,
         secondary: AppColors.cyan,
-        surface: AppColors.surface,
+        surface: AppColors.deepNavy,
         error: AppColors.error,
+        onPrimary: Colors.white,
+        onSecondary: AppColors.deepNavy,
+        onSurface: Colors.white,
       ),
-
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.deepNavy,
         elevation: 0,
-        centerTitle: false,
-        foregroundColor: AppColors.textPrimary,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
+        titleTextStyle: AppTextStyles.h3,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
-
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: AppColors.surface.withValues(alpha: 0.05),
         elevation: AppDimensions.cardElevation,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLG),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
+          side: BorderSide(
+            color: AppColors.cyan.withValues(alpha: 0.15),
+            width: 1,
+          ),
         ),
       ),
-
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size(double.infinity, AppDimensions.buttonHeight),
           backgroundColor: AppColors.royalBlue,
           foregroundColor: Colors.white,
-          elevation: 0,
+          minimumSize: const Size.fromHeight(AppDimensions.buttonHeight),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
           ),
-          textStyle: AppTextStyles.button,
+          textStyle: AppTextStyles.buttonLabel,
+          elevation: 4,
+          shadowColor: AppColors.electricBlue.withValues(alpha: 0.4),
         ),
       ),
-
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
-
+        fillColor: AppColors.surface.withValues(alpha: 0.08),
+        hintStyle: AppTextStyles.bodyMedium,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: AppColors.cyan.withValues(alpha: 0.2)),
         ),
-
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(color: AppColors.cyan.withValues(alpha: 0.2)),
         ),
-
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
-          borderSide: const BorderSide(color: AppColors.royalBlue, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.cyan, width: 1.5),
         ),
-
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.paddingMD,
-          vertical: AppDimensions.paddingMD,
-        ),
-      ),
-
-      textTheme: const TextTheme(
-        displayLarge: AppTextStyles.display,
-        headlineLarge: AppTextStyles.heading1,
-        headlineMedium: AppTextStyles.heading2,
-        titleLarge: AppTextStyles.heading3,
-        bodyLarge: AppTextStyles.body,
-        bodyMedium: AppTextStyles.bodySecondary,
-        labelLarge: AppTextStyles.button,
-        bodySmall: AppTextStyles.caption,
       ),
     );
   }
+
+  // Define light and dark aliases to satisfy app.dart router/theme callers
+  static ThemeData get light => darkTheme;
+  static ThemeData get dark => darkTheme;
+  static ThemeData get theme => darkTheme;
 }

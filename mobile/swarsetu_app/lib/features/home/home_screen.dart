@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:swarsetu_app/core/constants/app_text_styles.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_dimensions.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/constants/route_constants.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_dimensions.dart';
+import '../../core/constants/app_strings.dart';
+import '../../core/theme/app_text_styles.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,68 +11,131 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.deepNavy,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppDimensions.paddingLG),
+        child: Padding(
+          padding: const EdgeInsets.all(AppDimensions.paddingMD),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
-
-              const Text(
-                '${AppStrings.goodMorning} 👋',
-                style: AppTextStyles.heading2,
+              const SizedBox(height: AppDimensions.paddingMD),
+              Text(AppStrings.goodMorning, style: AppTextStyles.bodyMedium),
+              const SizedBox(height: 4),
+              Text(
+                AppStrings.appName,
+                style: AppTextStyles.h1.copyWith(color: AppColors.cyan),
               ),
-
-              const SizedBox(height: 8),
-
-              const Text(
+              const SizedBox(height: AppDimensions.paddingSM),
+              Text(
                 AppStrings.languageBarrier,
-                style: AppTextStyles.bodySecondary,
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: Colors.white.withValues(alpha: 0.8),
+                ),
+              ),
+              const SizedBox(height: AppDimensions.paddingXL),
+
+              // Hero Translation Button
+              GestureDetector(
+                onTap: () => context.push('/translate'),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(AppDimensions.paddingLG),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [AppColors.royalBlue, AppColors.electricBlue],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(AppDimensions.radiusLG),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.electricBlue.withValues(alpha: 0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(AppDimensions.paddingMD),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.mic_rounded,
+                          color: Colors.white,
+                          size: AppDimensions.iconLG,
+                        ),
+                      ),
+                      const SizedBox(width: AppDimensions.paddingMD),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppStrings.startTranslating,
+                              style: AppTextStyles.h3,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              AppStrings.tapToSpeak,
+                              style: AppTextStyles.bodySmall.copyWith(
+                                color: Colors.white.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: Colors.white,
+                        size: AppDimensions.iconSM,
+                      ),
+                    ],
+                  ),
+                ),
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: AppDimensions.paddingXL),
+              Text(AppStrings.quickAccess, style: AppTextStyles.h3),
+              const SizedBox(height: AppDimensions.paddingMD),
 
-              _buildTranslateCard(context),
-
-              const SizedBox(height: 32),
-
-              const Text(AppStrings.quickAccess, style: AppTextStyles.heading3),
-
-              const SizedBox(height: 16),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildQuickCard(
-                      icon: Icons.menu_book_rounded,
+              // Quick Actions Grid
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: AppDimensions.paddingMD,
+                  mainAxisSpacing: AppDimensions.paddingMD,
+                  children: [
+                    _buildQuickCard(
+                      context,
                       title: AppStrings.phrasebook,
-                      onTap: () {},
+                      icon: Icons.menu_book_rounded,
+                      route: '/phrasebook',
                     ),
-                  ),
-
-                  const SizedBox(width: 16),
-
-                  Expanded(
-                    child: _buildQuickCard(
-                      icon: Icons.history_rounded,
+                    _buildQuickCard(
+                      context,
                       title: AppStrings.history,
-                      onTap: () {},
+                      icon: Icons.history_rounded,
+                      route: '/history',
                     ),
-                  ),
-                ],
+                    _buildQuickCard(
+                      context,
+                      title: AppStrings.contribute,
+                      icon: Icons.volunteer_activism_rounded,
+                      route: '/contribute',
+                    ),
+                    _buildQuickCard(
+                      context,
+                      title: AppStrings.settings,
+                      icon: Icons.settings_rounded,
+                      route: '/settings',
+                    ),
+                  ],
+                ),
               ),
-
-              const SizedBox(height: 32),
-
-              const Text(
-                AppStrings.recentTranslations,
-                style: AppTextStyles.heading3,
-              ),
-
-              const SizedBox(height: 16),
-
-              _buildEmptyHistory(),
             ],
           ),
         ),
@@ -82,137 +143,34 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTranslateCard(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.push(RouteConstants.translate);
-      },
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(AppDimensions.paddingLG),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
-          gradient: const LinearGradient(
-            colors: [AppColors.royalBlue, AppColors.electricBlue],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.royalBlue.withOpacity(0.25),
-              blurRadius: 30,
-              offset: const Offset(0, 15),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(Icons.graphic_eq_rounded, color: Colors.white, size: 36),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              AppStrings.startTranslating,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-
-            const SizedBox(height: 8),
-
-            const Text(
-              'Speak naturally. Let SwarSetu bridge the gap.',
-              style: TextStyle(color: Colors.white70, fontSize: 14),
-            ),
-
-            const SizedBox(height: 24),
-
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.mic_rounded, color: Colors.white, size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    AppStrings.tapToSpeak,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuickCard({
-    required IconData icon,
+  Widget _buildQuickCard(
+    BuildContext context, {
     required String title,
-    required VoidCallback onTap,
+    required IconData icon,
+    required String route,
   }) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => context.push(route),
       child: Container(
         padding: const EdgeInsets.all(AppDimensions.paddingMD),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLG),
-          border: Border.all(color: AppColors.softBlue.withOpacity(0.3)),
+          color: AppColors.surface.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMD),
+          border: Border.all(color: AppColors.cyan.withValues(alpha: 0.15)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              height: 44,
-              width: 44,
-              decoration: BoxDecoration(
-                color: AppColors.softBlue.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(14),
+            Icon(icon, color: AppColors.cyan, size: AppDimensions.iconLG),
+            const SizedBox(height: AppDimensions.paddingSM),
+            Text(
+              title,
+              style: AppTextStyles.bodyLarge.copyWith(
+                fontWeight: FontWeight.w600,
               ),
-              child: Icon(icon, color: AppColors.royalBlue),
             ),
-
-            const SizedBox(height: 16),
-
-            Text(title, style: AppTextStyles.heading3),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildEmptyHistory() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLG),
-      ),
-      child: const Column(
-        children: [
-          Icon(Icons.translate_rounded, size: 36, color: AppColors.softBlue),
-
-          SizedBox(height: 12),
-
-          Text(
-            'Your translations will appear here.',
-            textAlign: TextAlign.center,
-            style: AppTextStyles.bodySecondary,
-          ),
-        ],
       ),
     );
   }

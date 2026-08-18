@@ -1,11 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/constants/route_constants.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_dimensions.dart';
+import '../../core/constants/app_strings.dart';
+import '../../core/theme/app_text_styles.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,33 +14,34 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
-  late final Animation<double> _scaleAnimation;
-  late final Animation<double> _fadeAnimation;
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1800),
+      duration: const Duration(milliseconds: 1500),
     );
 
-    _scaleAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutBack,
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     _controller.forward();
 
-    Future.delayed(const Duration(milliseconds: 2400), () {
-      if (!mounted) return;
-
-      context.go(RouteConstants.home);
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        context.go('/home');
+      }
     });
   }
 
@@ -55,41 +54,78 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.deepNavy,
       body: Stack(
         children: [
-          _buildLiquidBackground(),
-
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.cyan.withValues(alpha: 0.15),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -100,
+            left: -100,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.royalBlue.withValues(alpha: 0.2),
+              ),
+            ),
+          ),
           Center(
             child: FadeTransition(
               opacity: _fadeAnimation,
               child: ScaleTransition(
                 scale: _scaleAnimation,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildLogo(),
-
-                    const SizedBox(height: 24),
-
-                    const Text(
-                      AppStrings.appName,
-                      style: TextStyle(
+                    Container(
+                      padding: const EdgeInsets.all(AppDimensions.paddingXL),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: const LinearGradient(
+                          colors: [AppColors.royalBlue, AppColors.cyan],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.cyan.withValues(alpha: 0.4),
+                            blurRadius: 30,
+                            spreadRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.record_voice_over_rounded,
+                        size: AppDimensions.iconXL,
                         color: Colors.white,
-                        fontSize: 38,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -1,
                       ),
                     ),
-
-                    const SizedBox(height: 8),
-
-                    const Text(
+                    const SizedBox(height: AppDimensions.paddingLG),
+                    Text(
+                      AppStrings.appName,
+                      style: AppTextStyles.h1.copyWith(
+                        fontSize: 40,
+                        color: AppColors.cyan,
+                      ),
+                    ),
+                    const SizedBox(height: AppDimensions.paddingSM),
+                    Text(
                       AppStrings.tagline,
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0.5,
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        letterSpacing: 1.2,
                       ),
                     ),
                   ],
@@ -98,74 +134,6 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildLogo() {
-    return Container(
-      height: 110,
-      width: 110,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          colors: [AppColors.cyan, AppColors.electricBlue],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.cyan.withOpacity(0.35),
-            blurRadius: 40,
-            spreadRadius: 5,
-          ),
-        ],
-      ),
-      child: const Icon(
-        Icons.graphic_eq_rounded,
-        color: Colors.white,
-        size: 52,
-      ),
-    );
-  }
-
-  Widget _buildLiquidBackground() {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.deepNavy, Color(0xFF0B2A52), AppColors.royalBlue],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            top: -100,
-            right: -80,
-            child: _buildBlurCircle(size: 300, color: AppColors.cyan),
-          ),
-
-          Positioned(
-            bottom: -120,
-            left: -100,
-            child: _buildBlurCircle(size: 350, color: AppColors.electricBlue),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBlurCircle({required double size, required Color color}) {
-    return ImageFiltered(
-      imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
-      child: Container(
-        height: size,
-        width: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: color.withOpacity(0.35),
-        ),
       ),
     );
   }
