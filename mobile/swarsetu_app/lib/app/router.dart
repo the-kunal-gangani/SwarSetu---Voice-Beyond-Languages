@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swarsetu_app/features/contributions/presentation/screens/contribution_screen.dart';
 import 'package:swarsetu_app/features/settings/presentation/screens/settings_screen.dart';
@@ -7,6 +6,7 @@ import '../features/splash/splash_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/translation/presentation/screens/translation_screen.dart';
 import '../features/phrasebook/presentation/screens/phrasebook_screen.dart';
+import '../features/history/presentation/screens/history_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: RouteConstants.splash,
@@ -29,8 +29,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteConstants.history,
-      builder: (context, state) =>
-          const Scaffold(body: Center(child: Text('History Placeholder'))),
+      builder: (context, state) => const HistoryScreen(),
     ),
     GoRoute(
       path: RouteConstants.contribute,

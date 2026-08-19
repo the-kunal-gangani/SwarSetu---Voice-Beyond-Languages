@@ -1,13 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../history/data/history_local_storage.dart';
+import '../../history/domain/entities/history_entry.dart';
+import '../domain/entities/translation.dart';
 import '../domain/repositories/translation_repository.dart';
 import 'translation_event.dart';
 import 'translation_state.dart';
 
 class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
   final TranslationRepository repository;
+  final HistoryLocalStorage historyStorage;
 
-  TranslationBloc({required this.repository})
-    : super(const TranslationState()) {
+  TranslationBloc({
+    required this.repository,
+    HistoryLocalStorage? historyStorage,
+  }) : historyStorage = historyStorage ?? HistoryLocalStorage(),
+       super(const TranslationState()) {
     on<SourceLanguageChanged>(_onSourceLanguageChanged);
     on<TargetLanguageChanged>(_onTargetLanguageChanged);
     on<SwapLanguagesRequested>(_onSwapLanguagesRequested);
@@ -64,6 +71,7 @@ class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
       emit(
         state.copyWith(status: TranslationStatus.success, result: translation),
       );
+      await _saveToHistory(translation);
     } catch (e) {
       emit(
         state.copyWith(
@@ -90,6 +98,7 @@ class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
       emit(
         state.copyWith(status: TranslationStatus.success, result: translation),
       );
+      await _saveToHistory(translation);
     } catch (e) {
       emit(
         state.copyWith(
@@ -109,6 +118,19 @@ class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
         status: TranslationStatus.initial,
         clearResult: true,
         errorMessage: null,
+      ),
+    );
+  }
+
+  Future<void> _saveToHistory(Translation translation) async {
+    await historyStorage.add(
+      HistoryEntry(
+        id: translation.id,
+        sourceLanguage: translation.sourceLanguage,
+        targetLanguage: translation.targetLanguage,
+        sourceText: translation.sourceText,
+        translatedText: translation.translatedText,
+        timestamp: translation.timestamp,
       ),
     );
   }

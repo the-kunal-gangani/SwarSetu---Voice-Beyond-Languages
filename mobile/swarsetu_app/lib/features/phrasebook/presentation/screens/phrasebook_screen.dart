@@ -36,7 +36,7 @@ class _PhrasebookScreenState extends State<PhrasebookScreen> {
                   horizontal: AppDimensions.paddingMD,
                 ),
                 itemCount: PhrasebookData.categories.length,
-                separatorBuilder: (_, __) =>
+                separatorBuilder: (_, _) =>
                     const SizedBox(width: AppDimensions.paddingSM),
                 itemBuilder: (context, index) {
                   final category = PhrasebookData.categories[index];
