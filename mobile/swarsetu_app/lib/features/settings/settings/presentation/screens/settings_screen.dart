@@ -3,6 +3,7 @@ import 'package:swarsetu_app/core/constants/app_colors.dart';
 import 'package:swarsetu_app/core/constants/app_dimensions.dart';
 import 'package:swarsetu_app/core/constants/app_strings.dart';
 import 'package:swarsetu_app/core/constants/app_text_styles.dart';
+import 'package:swarsetu_app/features/history/data/history_local_storage.dart';
 import '../widgets/settings_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
