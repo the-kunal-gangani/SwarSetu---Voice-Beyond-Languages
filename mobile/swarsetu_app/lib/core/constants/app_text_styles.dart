@@ -51,4 +51,11 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: AppColors.textSecondary,
   );
+
+  // Aliases for consistency across feature screens
+  static const h1 = display;
+  static const h3 = heading3;
+  static const bodyLarge = body;
+  static const bodyMedium = bodySecondary;
+  static const bodySmall = caption;
 }

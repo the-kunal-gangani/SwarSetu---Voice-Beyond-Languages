@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swarsetu_app/features/settings/settings/presentation/screens/settings_screen.dart';
 import '../core/constants/route_constants.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/home/home_screen.dart';
@@ -37,8 +38,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteConstants.settings,
-      builder: (context, state) =>
-          const Scaffold(body: Center(child: Text('Settings Placeholder'))),
+      builder: (context, state) => const SettingsScreen(),
     ),
   ],
 );
