@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swarsetu_app/features/contributions/presentation/screens/contribution_screen.dart';
 import 'package:swarsetu_app/features/settings/settings/presentation/screens/settings_screen.dart';
 import '../core/constants/route_constants.dart';
 import '../features/splash/splash_screen.dart';
@@ -33,8 +34,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteConstants.contribute,
-      builder: (context, state) =>
-          const Scaffold(body: Center(child: Text('Contribute Placeholder'))),
+      builder: (context, state) => const ContributionScreen(),
     ),
     GoRoute(
       path: RouteConstants.settings,
