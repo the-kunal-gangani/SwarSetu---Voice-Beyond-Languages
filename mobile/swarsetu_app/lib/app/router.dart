@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swarsetu_app/features/contributions/presentation/screens/contribution_screen.dart';
-import 'package:swarsetu_app/features/settings/settings/presentation/screens/settings_screen.dart';
+import 'package:swarsetu_app/features/settings/presentation/screens/settings_screen.dart';
 import '../core/constants/route_constants.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/home/home_screen.dart';
