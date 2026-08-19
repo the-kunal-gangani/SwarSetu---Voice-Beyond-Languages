@@ -107,7 +107,7 @@ class TranslationBloc extends Bloc<TranslationEvent, TranslationState> {
     emit(
       state.copyWith(
         status: TranslationStatus.initial,
-        result: null,
+        clearResult: true,
         errorMessage: null,
       ),
     );

@@ -23,13 +23,14 @@ class TranslationState extends Equatable {
     String? targetLanguage,
     TranslationStatus? status,
     Translation? result,
+    bool clearResult = false,
     String? errorMessage,
   }) {
     return TranslationState(
       sourceLanguage: sourceLanguage ?? this.sourceLanguage,
       targetLanguage: targetLanguage ?? this.targetLanguage,
       status: status ?? this.status,
-      result: result ?? this.result,
+      result: clearResult ? null : (result ?? this.result),
       errorMessage: errorMessage,
     );
   }
