@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swarsetu_app/core/constants/route_constants.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_dimensions.dart';
 import '../../core/constants/app_strings.dart';
@@ -36,7 +37,7 @@ class HomeScreen extends StatelessWidget {
 
               // Hero Translation Button
               GestureDetector(
-                onTap: () => context.push('/translate'),
+                onTap: () => context.push(RouteConstants.translate),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(AppDimensions.paddingLG),
@@ -113,25 +114,25 @@ class HomeScreen extends StatelessWidget {
                       context,
                       title: AppStrings.phrasebook,
                       icon: Icons.menu_book_rounded,
-                      route: '/phrasebook',
+                      route: RouteConstants.phrasebook,
                     ),
                     _buildQuickCard(
                       context,
                       title: AppStrings.history,
                       icon: Icons.history_rounded,
-                      route: '/history',
+                      route: RouteConstants.history,
                     ),
                     _buildQuickCard(
                       context,
                       title: AppStrings.contribute,
                       icon: Icons.volunteer_activism_rounded,
-                      route: '/contribute',
+                      route: RouteConstants.contribute,
                     ),
                     _buildQuickCard(
                       context,
                       title: AppStrings.settings,
                       icon: Icons.settings_rounded,
-                      route: '/settings',
+                      route: RouteConstants.settings,
                     ),
                   ],
                 ),
