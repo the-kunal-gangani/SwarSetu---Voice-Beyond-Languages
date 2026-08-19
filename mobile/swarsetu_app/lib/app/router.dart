@@ -4,6 +4,7 @@ import '../core/constants/route_constants.dart';
 import '../features/splash/splash_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/translation/presentation/screens/translation_screen.dart';
+import '../features/phrasebook/presentation/screens/phrasebook_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: RouteConstants.splash,
@@ -22,8 +23,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteConstants.phrasebook,
-      builder: (context, state) =>
-          const Scaffold(body: Center(child: Text('Phrasebook Placeholder'))),
+      builder: (context, state) => const PhrasebookScreen(),
     ),
     GoRoute(
       path: RouteConstants.history,
