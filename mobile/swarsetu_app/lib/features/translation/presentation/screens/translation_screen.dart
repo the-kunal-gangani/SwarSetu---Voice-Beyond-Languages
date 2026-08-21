@@ -38,7 +38,7 @@ class _TranslationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.deepNavy,
+      backgroundColor: AppColors.midnightBlue,
       appBar: AppBar(
         title: Text(AppStrings.translate, style: AppTextStyles.h3),
         actions: [

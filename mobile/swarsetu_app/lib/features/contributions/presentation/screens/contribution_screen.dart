@@ -67,7 +67,7 @@ class _ContributionScreenState extends State<ContributionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.deepNavy,
+      backgroundColor: AppColors.midnightBlue,
       appBar: AppBar(
         title: Text(AppStrings.contribute, style: AppTextStyles.h3),
       ),
@@ -190,7 +190,7 @@ class _ContributionScreenState extends State<ContributionScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
-          dropdownColor: AppColors.deepNavy,
+          dropdownColor: AppColors.midnightBlue,
           isExpanded: true,
           icon: const Icon(
             Icons.keyboard_arrow_down_rounded,

@@ -43,7 +43,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.deepNavy,
+      backgroundColor: AppColors.midnightBlue,
       appBar: AppBar(
         title: Text(AppStrings.recentTranslations, style: AppTextStyles.h3),
         actions: [

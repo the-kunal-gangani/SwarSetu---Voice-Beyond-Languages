@@ -21,7 +21,7 @@ class _PhrasebookScreenState extends State<PhrasebookScreen> {
     final phrases = PhrasebookData.byCategory(_selectedCategory);
 
     return Scaffold(
-      backgroundColor: AppColors.deepNavy,
+      backgroundColor: AppColors.midnightBlue,
       appBar: AppBar(
         title: Text(AppStrings.phrasebook, style: AppTextStyles.h3),
       ),

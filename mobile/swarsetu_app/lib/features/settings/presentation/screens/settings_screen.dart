@@ -12,7 +12,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.deepNavy,
+      backgroundColor: AppColors.midnightBlue,
       appBar: AppBar(title: Text(AppStrings.settings, style: AppTextStyles.h3)),
       body: SafeArea(
         child: ListView(
@@ -59,7 +59,7 @@ class SettingsScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppColors.deepNavy,
+        backgroundColor: AppColors.midnightBlue,
         title: Text('Clear History?', style: AppTextStyles.h3),
         content: Text(
           'This will permanently delete all saved translations.',
