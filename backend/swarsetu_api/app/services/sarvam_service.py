@@ -28,8 +28,10 @@ async def translate_text(text: str, source_lang: str, target_lang: str) -> str:
         return f"[Translated to {target_lang}]: {text}"
 
     url = f"{settings.SARVAM_BASE_URL}/translate"
+    
+    # FIX 1: "input" must be a string, not a list
     payload = {
-        "input": [text],
+        "input": text,  
         "source_language_code": source_lang,
         "target_language_code": target_lang,
         "mode": "formal",
@@ -39,10 +41,12 @@ async def translate_text(text: str, source_lang: str, target_lang: str) -> str:
     async with httpx.AsyncClient() as client:
         headers = {**HEADERS, "Content-Type": "application/json"}
         response = await client.post(url, headers=headers, json=payload, timeout=15.0)
+        
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=f"Translation Error: {response.text}")
-        translations = response.json().get("translations", [])
-        return translations[0] if translations else ""
+        
+        # FIX 2: Extract the direct 'translated_text' string from the response
+        return response.json().get("translated_text", "")
 
 async def text_to_speech(text: str, target_lang: str) -> bytes:
     """Sarvam Bulbul TTS"""
