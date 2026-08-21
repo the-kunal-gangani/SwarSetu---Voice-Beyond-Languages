@@ -1,3 +1,4 @@
+from fastapi import Request
 import uuid
 import os
 from datetime import datetime, timezone
@@ -22,21 +23,27 @@ class TranslationService:
         )
 
     @staticmethod
-    async def process_audio_translation(audio_bytes: bytes, filename: str, source_lang: str, target_lang: str) -> TranslationResponse:
-        # 1. STT
+    async def process_audio_translation(
+        request: Request,  # <-- ADDED
+        audio_bytes: bytes, 
+        filename: str, 
+        source_lang: str, 
+        target_lang: str
+    ) -> TranslationResponse:
+        
         source_text = await sarvam_service.speech_to_text(audio_bytes, filename)
-        # 2. Translation
         translated_text = await sarvam_service.translate_text(source_text, source_lang, target_lang)
-        # 3. TTS
         tts_audio = await sarvam_service.text_to_speech(translated_text, target_lang)
         
-        # 4. Save audio locally for immediate streaming
+        # Keeping the sync write as advised (it's fast enough for a hackathon MVP)
         audio_filename = f"{uuid.uuid4()}.wav"
         filepath = os.path.join("local_audio", audio_filename)
         with open(filepath, "wb") as f:
             f.write(tts_audio)
             
-        audio_url = f"http://10.0.2.2:8000/static/{audio_filename}"  # 10.0.2.2 maps to host from Android emulator
+        # <-- FIX: Dynamic URL generation based on the incoming request
+        base_url = str(request.base_url).rstrip("/")
+        audio_url = f"{base_url}/static/{audio_filename}" 
 
         return TranslationResponse(
             id=str(uuid.uuid4()),

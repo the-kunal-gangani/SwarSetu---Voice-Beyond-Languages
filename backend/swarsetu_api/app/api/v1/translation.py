@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Request
 from app.schemas.translation_schema import TranslationTextRequest, TranslationResponse
 from app.services.translation_service import translation_service
 
@@ -14,12 +14,14 @@ async def translate_text_endpoint(payload: TranslationTextRequest):
 
 @router.post("/audio", response_model=TranslationResponse)
 async def translate_audio_endpoint(
+    request: Request,  # <-- ADDED
     audio: UploadFile = File(...),
     source_language: str = Form(...),
     target_language: str = Form(...)
 ):
     audio_bytes = await audio.read()
     return await translation_service.process_audio_translation(
+        request=request,  # <-- ADDED
         audio_bytes=audio_bytes,
         filename=audio.filename or "audio.wav",
         source_lang=source_language,

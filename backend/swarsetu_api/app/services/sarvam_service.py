@@ -17,9 +17,13 @@ async def speech_to_text(audio_bytes: bytes, filename: str = "audio.wav") -> str
 
     async with httpx.AsyncClient() as client:
         response = await client.post(url, headers=HEADERS, files=files, data=data, timeout=30.0)
+        
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=f"STT Error: {response.text}")
-        return response.json().get("transcript", "")
+        
+        result = response.json()
+        print(f"\n--- DEBUG SAARAS (STT) RESPONSE ---\n{result}\n")
+        return result.get("transcript", "")
 
 async def translate_text(text: str, source_lang: str, target_lang: str) -> str:
     """Sarvam Mayura Translation"""
@@ -29,11 +33,15 @@ async def translate_text(text: str, source_lang: str, target_lang: str) -> str:
 
     url = f"{settings.SARVAM_BASE_URL}/translate"
     
-    # FIX 1: "input" must be a string, not a list
+    # Format language codes to match Sarvam's expected "-IN" suffix
+    src_code = f"{source_lang}-IN" if "-" not in source_lang and source_lang != "auto" else source_lang
+    tgt_code = f"{target_lang}-IN" if "-" not in target_lang else target_lang
+    
+    # "input" must be a string, not a list
     payload = {
         "input": text,  
-        "source_language_code": source_lang,
-        "target_language_code": target_lang,
+        "source_language_code": src_code,
+        "target_language_code": tgt_code,
         "mode": "formal",
         "model": "mayura:v1"
     }
@@ -45,18 +53,24 @@ async def translate_text(text: str, source_lang: str, target_lang: str) -> str:
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=f"Translation Error: {response.text}")
         
-        # FIX 2: Extract the direct 'translated_text' string from the response
-        return response.json().get("translated_text", "")
+        result = response.json()
+        print(f"\n--- DEBUG MAYURA (TRANS) RESPONSE ---\n{result}\n")
+        return result.get("translated_text", "")
 
 async def text_to_speech(text: str, target_lang: str) -> bytes:
     """Sarvam Bulbul TTS"""
     if not settings.SARVAM_API_KEY:
+        # Mock response returning empty bytes if API key is not yet set
         return b"mock_audio_bytes"
 
     url = f"{settings.SARVAM_BASE_URL}/text-to-speech"
+    
+    # Format language codes to match Sarvam's expected "-IN" suffix
+    tgt_code = f"{target_lang}-IN" if "-" not in target_lang else target_lang
+
     payload = {
         "inputs": [text],
-        "target_language_code": target_lang,
+        "target_language_code": tgt_code,
         "model": "bulbul:v3",
         "speaker": "shubh"
     }
@@ -64,10 +78,15 @@ async def text_to_speech(text: str, target_lang: str) -> bytes:
     async with httpx.AsyncClient() as client:
         headers = {**HEADERS, "Content-Type": "application/json"}
         response = await client.post(url, headers=headers, json=payload, timeout=30.0)
+        
         if response.status_code != 200:
             raise HTTPException(status_code=response.status_code, detail=f"TTS Error: {response.text}")
         
-        audios = response.json().get("audios", [])
+        result = response.json()
+        print(f"\n--- DEBUG BULBUL (TTS) RESPONSE ---\n{result.keys()}\n")
+        
+        audios = result.get("audios", [])
         if audios:
             return base64.b64decode(audios[0])
+            
         raise HTTPException(status_code=500, detail="No audio returned from TTS")
