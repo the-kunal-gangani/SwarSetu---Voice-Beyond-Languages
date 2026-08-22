@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppDimensions.paddingXL),
 
-              // Hero Translation Button
+              // Hero Translation Button — warm voice gradient
               GestureDetector(
                 onTap: () => context.push(RouteConstants.translate),
                 child: Container(
@@ -43,15 +43,19 @@ class HomeScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(AppDimensions.paddingLG),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [AppColors.royalBlue, AppColors.electricBlue],
+                      colors: [
+                        AppColors.voiceCoral,
+                        AppColors.voiceMagenta,
+                        AppColors.voiceViolet,
+                      ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(AppDimensions.radiusLG),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.electricBlue.withValues(alpha: 0.3),
-                        blurRadius: 20,
+                        color: AppColors.voiceMagenta.withValues(alpha: 0.35),
+                        blurRadius: 24,
                         offset: const Offset(0, 10),
                       ),
                     ],
@@ -103,7 +107,7 @@ class HomeScreen extends StatelessWidget {
               Text(AppStrings.quickAccess, style: AppTextStyles.h3),
               const SizedBox(height: AppDimensions.paddingMD),
 
-              // Quick Actions Grid
+              // Quick Actions Grid — stays cool blue, deliberately
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
